@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Assignment5 : ProcessingLite.GP21
 {
+    public GameObject text;
     int numberOfBalls = 10;
     Ball[] balls;
     Player player = new Player(0, 0);
@@ -26,7 +27,7 @@ public class Assignment5 : ProcessingLite.GP21
     void Update()
     {
         Background(0);
-  
+
         player.Draw();
         player.Move();
 
@@ -34,14 +35,15 @@ public class Assignment5 : ProcessingLite.GP21
         {
             balls[i].UpdatePos();
             balls[i].DrawBall();
-            
-            CircleCollision(player.playerPosition.x, player.playerPosition.y, player.diameter, 
+
+            bool collision = CircleCollision(player.playerPosition.x, player.playerPosition.y, player.diameter,
                 balls[i].position.x, balls[i].position.y, balls[i].ballDiameter);
 
-            if (true)
+            if (collision)
             {
-                Square(5, 5, 5);
+                text.SetActive(true);
             }
+
         }
     }
     bool CircleCollision(float x1, float y1, float size1, float x2, float y2, float size2)
@@ -52,7 +54,7 @@ public class Assignment5 : ProcessingLite.GP21
         {
             return false;
         }
-        
+
         else if (Vector2.Distance(new Vector2(x1, y1), new Vector2(x2, y2)) > maxDistance)
         {
             return false;
@@ -63,37 +65,30 @@ public class Assignment5 : ProcessingLite.GP21
             return true;
         }
 
+
     }
 
 }
 
 public class Ball : ProcessingLite.GP21
 {
-    //Our class variables
     public Vector2 position; //Ball position
     Vector2 velocity; //Ball direction
     public float ballDiameter = 0.5f;
 
-    //Ball Constructor, called when we type new Ball(x, y);
     public Ball(float x, float y)
     {
-        //Set our position when we create the code.
         position = new Vector2(x, y);
 
-        //Create the velocity vector and give it a random direction.
         velocity = new Vector2();
         velocity.x = Random.Range(0, 11) - 5;
         velocity.y = Random.Range(0, 11) - 5;
     }
-
-    //Draw our ball
     public void DrawBall()
     {
         Fill(Random.Range(0, 255), 44, 12);
         Circle(position.x, position.y, ballDiameter);
     }
-
-    //Update our ball
     public void UpdatePos()
     {
         position += velocity * Time.deltaTime;
@@ -136,7 +131,7 @@ public class Player : ProcessingLite.GP21
 
         if (moveCorrect.magnitude != 0)
 
-        playerPosition.x = (playerPosition.x + Width) % Width;
+            playerPosition.x = (playerPosition.x + Width) % Width;
         playerPosition.y = (playerPosition.y + Height) % Height;
 
         {
